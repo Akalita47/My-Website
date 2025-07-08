@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Intel Desk</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000; /* Set background to black */
+            color: #f1f5f9;
+        }
+        .gradient-bg {
+            background: linear-gradient(to right, #1e3a8a, #0f172a);
+        }
+        .section-bg {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+        }
+        #map {
+            height: 500px; /* Fixed height for the map */
+            border-radius: 1rem;
+            position: relative; /* Ensure the map is positioned correctly */
+            overflow: hidden; /* Prevent overflow */
+            border: 5px solid blue; /* Black border around the map */
+        }
+    </style>
+</head>
+<body class="text-white">
+    <!-- Preloader -->
+    <div id="preloader" class="fixed inset-0 bg-black z-50 flex items-center justify-center">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-yellow-400"></div>
+    </div>
+
+    <script>
+      window.addEventListener('load', () => {
+        document.getElementById('preloader').style.display = 'none';
+      });
+    </script>
+
+    <!-- Header -->
+    <header class="gradient-bg text-white p-6 shadow-lg sticky top-0 z-50" data-aos="fade-down">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold tracking-wide">Global Intel Desk</h1>
+            <nav>
+                <ul class="flex gap-6 text-sm md:text-base">
+                    <li><a href="#about" class="hover:text-yellow-300 transition">About</a></li>
+                    <li><a href="#careers" class="hover:text-yellow-300 transition">Careers</a></li>
+                    <li><a href="#services" class="hover:text-yellow-300 transition">Services</a></li>
+                    <li><a href="#contact" class="hover:text-yellow-300 transition">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative h-[90vh] flex items-center justify-center text-white overflow-hidden">
+        <video autoplay muted loop class="absolute w-full h-full object-cover">
+            <source src="https://cdn.coverr.co/videos/coverr-a-digital-world-4544/1080p.mp4" type="video/mp4">
+        </video>
+        <div class="bg-black bg-opacity-60 z-10 p-10 rounded-xl text-center max-w-2xl" data-aos="zoom-in">
+            <h2 class="text-5xl font-bold mb-4">Global Security. Real-Time Intelligence.</h2>
+            <p class="text-lg">Empowering Corporations with OSINT, Travel Advisory & Crisis Updates</p>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 px-6 section-bg mx-6 my-10" data-aos="fade-up">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h3 class="text-4xl font-semibold mb-6 text-yellow-300">Who We Are</h3>
+            <p class="text-lg leading-relaxed mb-4">
+                Global Intel Desk is a premier intelligence firm dedicated to delivering actionable insights and risk mitigation strategies to businesses worldwide. Our expertise lies in Open Source Intelligence (OSINT), travel advisories, and live incident tracking, empowering organizations to stay ahead of evolving threats.
+            </p>
+            <h4 class="text-2xl font-semibold mb-4 text-yellow-200">Our Mission</h4>
+            <p class="text-lg leading-relaxed mb-4">
+                To provide our clients with the most accurate and timely intelligence, enabling them to make informed decisions and safeguard their interests in an increasingly complex global landscape.
+            </p>
+            <h4 class="text-2xl font-semibold mb-4 text-yellow-200">Our Vision</h4>
+            <p class="text-lg leading-relaxed mb-4">
+                To be the leading provider of intelligence solutions, recognized for our commitment to excellence, innovation, and integrity in the field of global security.
+            </p>
+            <h4 class="text-2xl font-semibold mb-4 text-yellow-200">Our Values</h4>
+            <ul class="list-disc list-inside mb-4 text-left">
+                <li>Integrity: We uphold the highest standards of integrity in all our actions.</li>
+                <li>Innovation: We embrace change and continuously seek new ways to improve our services.</li>
+                <li>Collaboration: We believe in the power of teamwork and partnerships to achieve common goals.</li>
+                <li>Excellence: We strive for excellence in everything we do, ensuring the highest quality of service.</li>
+            </ul>
+            <h4 class="text-2xl font-semibold mb-4 text-yellow-200">Why Choose Us?</h4>
+            <p class="text-lg leading-relaxed">
+                With a team of seasoned professionals and cutting-edge technology, Global Intel Desk offers tailored solutions that meet the unique needs of each client. Our commitment to providing real-time, reliable intelligence sets us apart in the industry, making us the trusted partner for organizations looking to navigate the complexities of global security.
+            </p>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section id="map-section" class="py-20 px-6 section-bg mx-6 my-10" data-aos="fade-up">
+        <div class="container mx-auto max-w-5xl">
+            <h3 class="text-4xl font-semibold mb-10 text-center text-yellow-300">Live Demo News Map</h3>
+            <div id="map"></div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 px-6 section-bg mx-6 my-10" data-aos="fade-up">
+        <div class="container mx-auto max-w-5xl">
+            <h3 class="text-4xl font-semibold mb-10 text-center text-yellow-300">What We Offer</h3>
+            <div class="grid md:grid-cols-2 gap-10">
+                <div class="p-6 rounded-xl bg-white bg-opacity-10 hover:bg-opacity-20 transition shadow-xl hover:scale-105 transform duration-300" data-aos="fade-up">
+                    <h4 class="text-xl font-bold mb-2 text-yellow-200">OSINT News Dashboard</h4>
+                    <p>Stay informed with verified intelligence from global open sources, customized to your industry.</p>
+                </div>
+                <div class="p-6 rounded-xl bg-white bg-opacity-10 hover:bg-opacity-20 transition shadow-xl hover:scale-105 transform duration-300" data-aos="fade-up">
+                    <h4 class="text-xl font-bold mb-2 text-yellow-200">Real-Time Alerts</h4>
+                    <p>Receive immediate notifications on global incidents, disruptions, and security risks.</p>
+                </div>
+                <div class="p-6 rounded-xl bg-white bg-opacity-10 hover:bg-opacity-20 transition shadow-xl hover:scale-105 transform duration-300" data-aos="fade-up">
+                    <h4 class="text-xl font-bold mb-2 text-yellow-200">Travel Advisory</h4>
+                    <p>Get AI-driven travel risk evaluations based on geopolitics, climate, and health conditions.</p>
+                </div>
+                <div class="p-6 rounded-xl bg-white bg-opacity-10 hover:bg-opacity-20 transition shadow-xl hover:scale-105 transform duration-300" data-aos="fade-up">
+                    <h4 class="text-xl font-bold mb-2 text-yellow-200">Custom Reports</h4>
+                    <p>Order tailor-made intelligence briefings specific to your business and geographical focus.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Careers Section -->
+    <section id="careers" class="py-20 px-6 section-bg mx-6 my-10" data-aos="fade-up">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h3 class="text-4xl font-semibold mb-6 text-yellow-300">Join Our Team</h3>
+            <p class="text-lg mb-6">
+                We’re hiring world-class professionals who want to innovate global security. Explore opportunities with us:
+            </p>
+            <ul class="text-left list-disc list-inside mb-4">
+                <li>Security Intelligence Analyst</li>
+                <li>Threat Monitoring Specialist</li>
+                <li>OSINT Dashboard Developer</li>
+                <li>Client Engagement Manager</li>
+            </ul>
+            <p>Send your CV to <a href="mailto:globalinteldesk@gmail.com" class="text-yellow-300 underline">globalinteldesk@gmail.com</a></p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-6 section-bg mx-6 my-10" data-aos="fade-up">
+        <div class="container mx-auto max-w-3xl">
+            <h3 class="text-4xl font-semibold mb-6 text-center text-yellow-300">Contact Us</h3>
+            <form id="contact-form" class="grid gap-6 p-8 rounded-xl bg-white bg-opacity-10">
+    <input type="text" id="name" placeholder="Your Name" required class="p-4 border border-white rounded-md bg-transparent text-white placeholder-gray-300 focus:ring-2 focus:ring-yellow-400">
+    <input type="email" id="email" placeholder="Your Email" required class="p-4 border border-white rounded-md bg-transparent text-white placeholder-gray-300 focus:ring-2 focus:ring-yellow-400">
+    <textarea id="message" placeholder="Your Message" rows="5" required class="p-4 border border-white rounded-md bg-transparent text-white placeholder-gray-300 focus:ring-2 focus:ring-yellow-400"></textarea>
+    <button type="submit" class="bg-yellow-400 text-black px-6 py-3 rounded-lg hover:bg-yellow-500 transition">Send Message</button>
+               </form><script>
+                     const scriptURL = "https://script.google.com/macros/s/AKfycby7Ou431C47R8gxRpM6SnHC5fwK8dH56M-9Va75yewaqrobpv7KQuZ_G7oYgvD2475OVw/exec"; // Replace this with your copied script URL
+
+  document.getElementById("contact-form").addEventListener("submit", e => {
+    e.preventDefault();
+
+    const formData = {
+      name: document.getElementById("name").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      message: document.getElementById("message").value.trim()
+    };
+
+    fetch(scriptURL, {
+      method: "POST",
+      body: JSON.stringify(formData),
+      headers: { "Content-Type": "application/json" }
+    })
+    .then(response => response.json())
+    .then(data => {
+      alert("✅ Message sent successfully!");
+      document.getElementById("contact-form").reset();
+    })
+    .catch(error => {
+      console.error("❌ Error!", error.message);
+      alert("❌ Failed to send message. Please try again later.");
+    });
+  });
+</script>
+
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="gradient-bg text-white py-6 text-center" data-aos="fade-up">
+        <p class="text-sm">&copy; 2025 Global Intel Desk. All rights reserved.</p>
+    </footer>
+
+    <!-- AOS Init -->
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Initialize the map
+        var map = L.map('map').setView([20, 0], 2); // Centered on the world
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Create a marker cluster group
+        var markers = L.markerClusterGroup();
+
+        // Function to generate random coordinates
+        function getRandomCoordinates() {
+            const lat = (Math.random() * 180 - 90).toFixed(6); // Latitude between -90 and 90
+            const lng = (Math.random() * 360 - 180).toFixed(6); // Longitude between -180 and 180
+            return [lat, lng];
+        }
+
+        // Function to simulate news alerts on the map
+        function simulateNewsAlert() {
+            const [lat, lng] = getRandomCoordinates();
+            const newsMessages = [
+                "New OSINT report released on global security trends.",
+                "Travel advisory updated for several countries due to unrest.",
+                "New technology launched to enhance data analysis.",
+                "Crisis management workshop scheduled for next month.",
+                "New partnership formed to improve intelligence sharing."
+            ];
+            const randomNews = newsMessages[Math.floor(Math.random() * newsMessages.length)];
+            const marker = L.marker([lat, lng]).bindPopup(`<b>Breaking News!</b><br>${randomNews}`);
+            markers.addLayer(marker);
+            map.addLayer(markers);
+        }
+
+        // Simulate new news alerts every 10 seconds
+        setInterval(simulateNewsAlert, 10000);
+    </script>
+</body>
+</html>
